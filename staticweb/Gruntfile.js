@@ -586,7 +586,7 @@ module.exports = function ( grunt ) {
           replacements: [
         {
           pattern: '$SERVER_API_ROOT',
-          replacement:'http://devapi:port'
+          replacement:'http://demoapp-qa.elasticbeanstalk.com'
         }
         ]
       }
@@ -599,7 +599,7 @@ module.exports = function ( grunt ) {
           replacements: [
             {
               pattern: '$SERVER_API_ROOT',
-              replacement:'http://prodapi:port'
+              replacement:'http://demoapp-prod.elasticbeanstalk.com'
             }
           ]
         }
