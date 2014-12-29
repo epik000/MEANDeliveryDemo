@@ -550,14 +550,14 @@ module.exports = function ( grunt ) {
     },
 
     nodemon: {
-      local: {
+      dev: {
         script: 'server/server.js'
       }
     },
 
     concurrent: {
-      local: {
-        tasks: ['nodemon:local','watch'],
+      dev: {
+        tasks: ['nodemon:dev','watch'],
         options: {
           logConcurrentOutput: true
         }
@@ -565,7 +565,7 @@ module.exports = function ( grunt ) {
     },
 
     'string-replace': {
-      local: {
+      dev: {
         files: {
           '<%= build_dir %>/src/common/config/config.js': '<%= build_dir %>/src/common/config/config.js'
         },
@@ -578,7 +578,7 @@ module.exports = function ( grunt ) {
           ]
         }
       },
-      development: {
+      qa: {
         files: {
           '<%= build_dir %>/src/common/config/config.js': '<%= build_dir %>/src/common/config/config.js'
         },
@@ -591,7 +591,7 @@ module.exports = function ( grunt ) {
         ]
       }
       },
-      production: {
+      prod: {
         files: {
           '<%= build_dir %>/src/common/config/config.js': '<%= build_dir %>/src/common/config/config.js'
         },
@@ -618,41 +618,31 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build:local', 'karma:unit', 'delta' ] );
+  grunt.registerTask( 'watch', [ 'build:dev', 'karma:unit', 'delta' ] );
 
   /**
    * The default task is to build and compile.
    */
-  grunt.registerTask( 'default', [ 'build', 'compile' ] );
+  grunt.registerTask( 'default', [ 'build:dev', 'compile' ] );
 
   /**
-   * The `build` task gets your app ready to run for development and testing.
-   */
-  grunt.registerTask( 'build', [
-    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
-    'karma:continuous'
-  ]);
-
-  /**
-  * The `build` task gets your app ready to run for development and testing.
-  */
-  grunt.registerTask( 'build:local', [
-    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build',
-    'string-replace:local','karmaconfig','karma:continuous'
-  ]);
-
-  /**
-  * The `build` task gets your app ready to run for development and testing.
+  * The `build:dev` task gets your app ready to run for development and testing.
   */
   grunt.registerTask( 'build:dev', [
     'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build',
-    'string-replace:development','karmaconfig','karma:continuous'
+    'string-replace:dev','karmaconfig','karma:continuous'
+  ]);
+
+  /**
+  * The `build:qa` task gets your app ready to run for development and testing.
+  */
+  grunt.registerTask( 'build:qa', [
+    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
+    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build',
+    'string-replace:qa','karmaconfig','karma:continuous'
   ]);
 
   /**
@@ -662,7 +652,7 @@ module.exports = function ( grunt ) {
     'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build',
-    'string-replace:production','karmaconfig','karma:continuous'
+    'string-replace:prod','karmaconfig','karma:continuous'
   ]);
 
   /**
@@ -739,7 +729,7 @@ module.exports = function ( grunt ) {
   });
 
   grunt.registerTask('server', [
-    'concurrent:local'
+    'concurrent:dev'
   ]);
 
 };
